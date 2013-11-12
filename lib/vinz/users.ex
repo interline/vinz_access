@@ -18,7 +18,7 @@ defmodule Vinz.Users do
   end
 
   def delete(deletor_id, user_id) do
-    unless check(deletor_id, @resource, :delete) do
+    unless Access.check(deletor_id, @resource, :delete) do
       { :error, :unauthroized }
     else
       if user = Repo.find(User, user_id) do

@@ -15,7 +15,7 @@ defmodule Vinz.Access do
   end
 
   def check(user_id, resource, mode) when mode in @modes do
-    can_acces?(user_id, resource, mode)
+    can_access?(user_id, resource, mode)
   end
 
   def can_create?(user_id, resource), do: can_access?(user_id, resource, :create)
