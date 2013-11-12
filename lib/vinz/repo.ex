@@ -9,4 +9,23 @@ defmodule Vinz.Repo do
         raise "`vinz_access` application environment variable `repo_url` needs to be set in the config"
     end
   end
+
+  def query_apis do
+    super() ++ [Vinz.Repo.Query.Api]
+  end
+end
+
+defmodule Vinz.Repo.Query.Api do
+  use Ecto.Query.Typespec
+
+  ## Types
+  deft boolean
+
+  @doc """
+  Aggregate function, returns true if atleast one input value is true.
+  See http://www.postgresql.org/docs/9.2/static/functions-aggregate.html
+  """
+  @aggregate true
+  def bool_or(booleans)
+  defs bool_or(boolean) :: boolean
 end

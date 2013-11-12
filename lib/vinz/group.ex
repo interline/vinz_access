@@ -5,8 +5,6 @@ defmodule Vinz.Group do
   queryable "vinz_group" do
     field :name, :string
     field :comment, :string
-    has_many :access_controls, Vinz.AccessControl
-    has_many :access_rules, Vinz.AccessRule
   end
 end
 

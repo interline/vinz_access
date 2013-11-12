@@ -13,7 +13,7 @@ defmodule Vinz.Access.Mixfile do
   end
 
   defp env(:prod), do: []
-  defp env(_), do: [ {:repo_url, "ecto://vinz@localhost/vinz"} ]
+  defp env(_), do: [ {:repo_url, "ecto://vinz@localhost/vinz?size=1&max_overflow=0"} ]
 
   defp deps do
     [ { :ecto, github: "elixir-lang/ecto" },

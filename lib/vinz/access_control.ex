@@ -5,10 +5,10 @@ defmodule Vinz.AccessControl do
     field :name, :string
     field :resource, :string
     field :global, :boolean
+    field :vinz_group_id, :integer
     field :can_create, :boolean
     field :can_read, :boolean
-    field :can_write, :boolean
+    field :can_update, :boolean
     field :can_delete, :boolean
-    belongs_to :group, Vinz.Group
   end
 end
