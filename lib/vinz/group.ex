@@ -6,6 +6,11 @@ defmodule Vinz.Group do
     field :name, :string
     field :comment, :string
   end
+
+  def by_name(name) do
+     from g in __MODULE__,
+    where: g.name == ^name
+  end
 end
 
 defmodule Vinz.GroupMember do

@@ -21,7 +21,7 @@ create table vinz_group_member (
     unique (vinz_group_id, vinz_user_id)
 );
 
-create table vinz_access_control (
+create table vinz_access_right (
   id serial primary key,
   name varchar(100),
   resource varchar(100),
@@ -33,7 +33,7 @@ create table vinz_access_control (
   can_delete boolean
 );
 
-create table vinz_access_rule (
+create table vinz_access_filter (
   id serial primary key,
   name varchar(100),
   resource varchar(100),

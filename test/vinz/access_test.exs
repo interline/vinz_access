@@ -74,4 +74,23 @@ defmodule Vinz.Access.Test do
     domain = Vinz.Domains.get(id, resource, :read)
     ^domain = permit(id, resource, :read, fn(d) -> d end)
   end
+
+  test :load do
+    { resp, [] } = Vinz.Access.Load.load_string(%S([
+      group("test load group", "just a group to test loading"),
+      right("global rights to load resource", "load", [ :read, :create ]),
+      right("test load group rights to load resource", "load", "test load group", [ :create, :read, :update, :delete ]),
+      filter("global filter to load resource", "load", "a == b", [ :create, :read ]),
+      filter("test load group filter to load resource", "load", "test load group", "a == b", [ :delete, :update ])
+    ]))
+    group = Enum.first(resp)
+    group_id = group.id
+    [ 
+      Group.Entity[],
+      AccessRight.Entity[id: _, name: "global rights to load resource", resource: "load", global: true, can_read: true, can_create: true, can_delete: false, can_update: false ],
+      AccessRight.Entity[id: _, name: "test load group rights to load resource", resource: "load", global: false, vinz_group_id: group_id, can_read: true, can_create: true, can_delete: true, can_update: true ],
+      AccessFilter.Entity[id: _, name: "global filter to load resource", resource: "load", global: true, domain: "a == b", can_create: true, can_read: true, can_update: false, can_delete: false ],
+      AccessFilter.Entity[id: _, name: "test load group filter to load resource", resource: "load", global: false, vinz_group_id: group_id, domain: "a == b", can_create: false, can_read: false, can_delete: true, can_update: true ]
+    ] = resp
+  end
 end
