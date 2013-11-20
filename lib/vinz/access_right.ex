@@ -1,7 +1,7 @@
-defmodule Vinz.AccessControl do
+defmodule Vinz.AccessRight do
   use Ecto.Model
 
-  queryable "vinz_access_control" do
+  queryable "vinz_access_right" do
     field :name, :string
     field :resource, :string
     field :global, :boolean

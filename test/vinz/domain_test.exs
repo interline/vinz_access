@@ -5,23 +5,23 @@ defmodule Vinz.Domain.Test do
   alias Vinz.Group
   alias Vinz.GroupMember
   alias Vinz.Repo
-  alias Vinz.AccessRule, as: Rule
+  alias Vinz.AccessFilter, as: Filter
 
   setup_all do
     resource = "domain-test-resource"
     u = User.new(username: "domain-test", first_name: "Domain", last_name: "Test") |> Repo.create
     g = Group.new(name: "domain-test", description: "a group to test user domains") |> Repo.create
     m = GroupMember.new(vinz_group_id: g.id, vinz_user_id: u.id) |> Repo.create
-    Rule.new(name: "global-test-rule", resource: resource, global: true, domain: "G", can_read: true) |> Repo.create
-    Rule.new(name: "group-specific-rule-read", resource: resource, global: false, vinz_group_id: g.id, domain: "GSR", can_read: true) |> Repo.create
-    Rule.new(name: "group-specific-rule-write", resource: resource, global: false, vinz_group_id: g.id, domain: "U", can_update: true) |> Repo.create
-    Rule.new(name: "group-specific-rule-write", resource: resource, global: false, vinz_group_id: g.id, domain: "C", can_create: true) |> Repo.create
-    Rule.new(name: "group-specific-rule-write", resource: resource, global: false, vinz_group_id: g.id, domain: "D", can_delete: true) |> Repo.create
+    Filter.new(name: "global-test-rule", resource: resource, global: true, domain: "G", can_read: true) |> Repo.create
+    Filter.new(name: "group-specific-rule-read", resource: resource, global: false, vinz_group_id: g.id, domain: "GSR", can_read: true) |> Repo.create
+    Filter.new(name: "group-specific-rule-write", resource: resource, global: false, vinz_group_id: g.id, domain: "U", can_update: true) |> Repo.create
+    Filter.new(name: "group-specific-rule-write", resource: resource, global: false, vinz_group_id: g.id, domain: "C", can_create: true) |> Repo.create
+    Filter.new(name: "group-specific-rule-write", resource: resource, global: false, vinz_group_id: g.id, domain: "D", can_delete: true) |> Repo.create
     { :ok, [ user: u, group: g, group_member: m, resource: resource ] }
   end
 
   teardown_all context do
-    Repo.delete_all(Rule)
+    Repo.delete_all(Filter)
     Repo.delete(context[:group_member])
     Repo.delete(context[:group])
     Repo.delete(context[:user])

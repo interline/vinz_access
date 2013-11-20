@@ -9,7 +9,7 @@ defmodule Vinz.Access.Test do
   alias Vinz.User
   alias Vinz.Group
   alias Vinz.GroupMember
-  alias Vinz.AccessControl
+  alias Vinz.AccessRight
 
 
   setup_all do
@@ -20,11 +20,11 @@ defmodule Vinz.Access.Test do
     group = Group.new(name: "access-test", comment: "a group for testing access controll") |> Repo.create
     GroupMember.new(vinz_group_id: group.id, vinz_user_id: user.id) |> Repo.create
 
-    AccessControl.new(name: "test-access-create", resource: resource, global: true, can_create: true) |> Repo.create
-    AccessControl.new(name: "test-access-read", resource: resource, global: false, vinz_group_id: group.id, can_read: true) |> Repo.create
-    AccessControl.new(name: "test-access-update", resource: resource, global: false, vinz_group_id: group.id, can_update: true) |> Repo.create
-    AccessControl.new(name: "test-access-delete", resource: resource, global: true, can_delete: true) |> Repo.create
-    AccessControl.new(name: "test-access-group-delete", resource: resource, global: false, vinz_group_id: group.id, can_delete: false)
+    AccessRight.new(name: "test-access-create", resource: resource, global: true, can_create: true) |> Repo.create
+    AccessRight.new(name: "test-access-read", resource: resource, global: false, vinz_group_id: group.id, can_read: true) |> Repo.create
+    AccessRight.new(name: "test-access-update", resource: resource, global: false, vinz_group_id: group.id, can_update: true) |> Repo.create
+    AccessRight.new(name: "test-access-delete", resource: resource, global: true, can_delete: true) |> Repo.create
+    AccessRight.new(name: "test-access-group-delete", resource: resource, global: false, vinz_group_id: group.id, can_delete: false)
 
     { :ok, [ user: user, resource: resource ] }
   end

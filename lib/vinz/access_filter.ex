@@ -1,7 +1,7 @@
-defmodule Vinz.AccessRule do
+defmodule Vinz.AccessFilter do
   use Ecto.Model
 
-  queryable "vinz_access_rule" do
+  queryable "vinz_access_filter" do
     field :name, :string
     field :resource, :string
     field :global, :boolean

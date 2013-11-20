@@ -5,7 +5,7 @@ defmodule Vinz.Access do
 
   alias Vinz.Repo
   alias Vinz.GroupMember
-  alias Vinz.AccessControl
+  alias Vinz.AccessRight
 
   @modes [ :create, :read, :update, :delete ]
 
@@ -28,9 +28,9 @@ defmodule Vinz.Access do
       |> Q.where([m], m.vinz_user_id == ^user_id)
       |> Repo.all
 
-    access = Q.from(ac in AccessControl)
-      |> Q.where([ac], ac.global or (ac.vinz_group_id in ^user_group_ids))
-      |> Q.where([ac], ac.resource == ^resource)
+    access = Q.from(a in AccessRight)
+      |> Q.where([r], r.global or (r.vinz_group_id in ^user_group_ids))
+      |> Q.where([r], r.resource == ^resource)
       |> select(mode)
       |> Repo.all
       |> Enum.first
@@ -38,8 +38,8 @@ defmodule Vinz.Access do
     !!access
   end
 
-  defp select(query, :create), do: Q.select(query, [ac], bool_or(ac.can_create))
-  defp select(query, :read),   do: Q.select(query, [ac], bool_or(ac.can_read))
-  defp select(query, :update), do: Q.select(query, [ac], bool_or(ac.can_update))
-  defp select(query, :delete), do: Q.select(query, [ac], bool_or(ac.can_delete))
+  defp select(query, :create), do: Q.select(query, [r], bool_or(r.can_create))
+  defp select(query, :read),   do: Q.select(query, [r], bool_or(r.can_read))
+  defp select(query, :update), do: Q.select(query, [r], bool_or(r.can_update))
+  defp select(query, :delete), do: Q.select(query, [r], bool_or(r.can_delete))
 end
