@@ -1,6 +1,6 @@
 # Vinz Access
 
-A users and groups permission based framework.
+Generic resource access controls via users, groups, access rights and access filters.
 
 ## Motivation
 
