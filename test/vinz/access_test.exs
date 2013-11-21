@@ -1,7 +1,7 @@
 defmodule Vinz.Access.Test do
   use ExUnit.Case
 
-  import Vinz.Access, only: [ can_create?: 2, can_read?: 2, can_update?: 2, can_delete?: 2, check!: 3 ]
+  import Vinz.Access, only: [ can_create?: 2, can_read?: 2, can_update?: 2, can_delete?: 2, check!: 3, permit: 4 ]
 
   alias Ecto.Adapters.Postgres
 
@@ -10,6 +10,7 @@ defmodule Vinz.Access.Test do
   alias Vinz.Group
   alias Vinz.GroupMember
   alias Vinz.AccessRight
+  alias Vinz.AccessFilter
 
 
   setup_all do
@@ -25,7 +26,8 @@ defmodule Vinz.Access.Test do
     AccessRight.new(name: "test-access-update", resource: resource, global: false, vinz_group_id: group.id, can_update: true) |> Repo.create
     AccessRight.new(name: "test-access-delete", resource: resource, global: true, can_delete: true) |> Repo.create
     AccessRight.new(name: "test-access-group-delete", resource: resource, global: false, vinz_group_id: group.id, can_delete: false)
-
+    AccessFilter.new(name: "test-access-read-rilter-a", resource: resource, global: false, domain: "a", vinz_group_id: group.id, can_read: true) |> Repo.create
+    AccessFilter.new(name: "test-access-read-rilter-b", resource: resource, global: false, domain: "b", vinz_group_id: group.id, can_read: true) |> Repo.create
     { :ok, [ user: user, resource: resource ] }
   end
   
@@ -61,5 +63,15 @@ defmodule Vinz.Access.Test do
       :throw, :unauthorized ->
         assert true
     end
+  end
+
+  test :permit, ctx do
+    id = ctx[:user].id
+    resource = ctx[:resource]
+
+    assert permit(id, resource, :delete, fn -> true end)
+    { :error, :unauthorized } = permit(id, "no-resource", :read, fn -> true end)
+    domain = Vinz.Domains.get(id, resource, :read)
+    ^domain = permit(id, resource, :read, fn(d) -> d end)
   end
 end

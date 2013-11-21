@@ -4,8 +4,9 @@ defmodule Vinz.Access do
   alias Ecto.Query, as: Q
 
   alias Vinz.Repo
-  alias Vinz.GroupMember
+  alias Vinz.Domains
   alias Vinz.AccessRight
+  alias Vinz.GroupMember
 
   @modes [ :create, :read, :update, :delete ]
 
@@ -16,6 +17,23 @@ defmodule Vinz.Access do
 
   def check(user_id, resource, mode) when mode in @modes do
     can_access?(user_id, resource, mode)
+  end
+
+  def permit(user_id, resource, mode, action) when mode in @modes and is_function(action, 0) do
+    if check(user_id, resource, mode) do
+      action.()
+    else
+      { :error, :unauthorized }
+    end
+  end
+
+  def permit(user_id, resource, mode, action) when mode in @modes and is_function(action, 1) do
+    domain = Domains.get(user_id, resource, mode)
+    if check(user_id, resource, mode) || domain do
+      action.(domain)
+    else
+      { :error, :unauthorized }
+    end
   end
 
   def can_create?(user_id, resource), do: can_access?(user_id, resource, :create)
