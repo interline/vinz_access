@@ -6,10 +6,6 @@ defmodule Vinz.Access.Domains do
   alias Vinz.Access.Models.GroupMember
 
   def get(user_id, resource, mode // :read) do
-    user_group_ids = Q.from(m in GroupMember, select: m.vinz_group_id)
-      |> Q.where([m], m.vinz_user_id == ^user_id)
-      |> Vinz.Access.Repo.all
-
     base_domain_query = Q.from(f in Filter, select: f.domain)
       |> Q.where([f], f.resource == ^resource)
       |> filter_on_mode(mode)
@@ -17,10 +13,19 @@ defmodule Vinz.Access.Domains do
     global_domains = Q.where(base_domain_query, [f], f.global)
       |> Vinz.Access.Repo.all
       |> join
-    
-    group_domains = Q.where(base_domain_query, [f], f.vinz_group_id in ^user_group_ids)
+
+    user_group_ids = Q.from(m in GroupMember, select: m.vinz_group_id)
+      |> Q.where([m], m.vinz_user_id == ^user_id)
       |> Vinz.Access.Repo.all
-      |> join("or")
+    
+    group_domains =
+      if Enum.count(user_group_ids) > 0 do
+        Q.where(base_domain_query, [f], f.vinz_group_id in ^user_group_ids)
+          |> Vinz.Access.Repo.all
+          |> join("or")
+      else
+        ""
+      end
 
     join([global_domains, group_domains])
   end

@@ -46,14 +46,18 @@ defmodule Vinz.Access do
       |> Q.where([m], m.vinz_user_id == ^user_id)
       |> Repo.all
 
-    access = Q.from(r in Right)
-      |> Q.where([r], r.global or (r.vinz_group_id in ^user_group_ids))
-      |> Q.where([r], r.resource == ^resource)
-      |> select(mode)
-      |> Repo.all
-      |> Enum.first
+    if Enum.count(user_group_ids) > 0 do
+      access = Q.from(r in Right)
+        |> Q.where([r], r.global or (r.vinz_group_id in ^user_group_ids))
+        |> Q.where([r], r.resource == ^resource)
+        |> select(mode)
+        |> Repo.all
+        |> Enum.first
 
-    !!access
+      !!access
+    else
+      false
+    end
   end
 
   defp select(query, :create), do: Q.select(query, [r], bool_or(r.can_create))

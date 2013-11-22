@@ -46,6 +46,8 @@ defmodule Vinz.Access.Test do
     refute can_read? id, "foo"
     refute can_update? id, "foo"
     refute can_delete? id, "foo"
+
+    refute can_delete? 0, resource
   end
 
   test :check!, ctx do

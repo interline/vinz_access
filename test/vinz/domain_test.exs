@@ -39,6 +39,8 @@ defmodule Vinz.Domain.Test do
     assert "(G) and (GSR)" == Domains.get(user.id, resource)
     assert "U" == Domains.get(user.id, resource, :update)
     assert "C" == Domains.get(user.id, resource, :create)
-    assert "D" == Domains.get(user.id, resource, :delete)  
+    assert "D" == Domains.get(user.id, resource, :delete)
+    # user with no groups...
+    assert "G" == Domains.get(0, resource, :read)
   end
 end
