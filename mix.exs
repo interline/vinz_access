@@ -9,7 +9,8 @@ defmodule Vinz.Access.Mixfile do
   end
 
   def application do
-    [ env: env(Mix.env) ]
+    [ env: env(Mix.env),
+      mod: { Vinz.Access.Application, [] } ]
   end
 
   defp env(:prod), do: []
@@ -17,6 +18,7 @@ defmodule Vinz.Access.Mixfile do
 
   defp deps do
     [ { :ecto, github: "elixir-lang/ecto" },
-      { :postgrex, github: "ericmj/postgrex" } ]
+      { :postgrex, github: "ericmj/postgrex" },
+      { :scrypt, github: "onkel-dirtus/erl-scrypt", branch: "lib-app" } ]
   end
 end
