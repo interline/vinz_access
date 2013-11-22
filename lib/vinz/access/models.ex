@@ -9,6 +9,10 @@ defmodule User do
     field :last_name, :string
     field :password_hash, :binary
   end
+
+  def hash_password(plaintext) do
+    
+  end
 end
 
 
@@ -32,8 +36,8 @@ defmodule GroupMember do
   use Ecto.Model
 
   queryable "vinz_access_group_member" do
-    field :vinz_group_id, :integer
-    field :vinz_user_id, :integer
+    field :vinz_access_group_id, :integer
+    field :vinz_access_user_id, :integer
   end
 end
 
@@ -45,7 +49,7 @@ defmodule Right do
     field :name, :string
     field :resource, :string
     field :global, :boolean
-    field :vinz_group_id, :integer
+    field :vinz_access_group_id, :integer
     field :can_create, :boolean
     field :can_read, :boolean
     field :can_update, :boolean
@@ -61,7 +65,7 @@ defmodule Filter do
     field :name, :string
     field :resource, :string
     field :global, :boolean
-    field :vinz_group_id, :integer
+    field :vinz_access_group_id, :integer
     field :domain, :string
     field :can_create, :boolean, default: false
     field :can_read, :boolean, default: false

@@ -42,13 +42,13 @@ defmodule Vinz.Access do
   def can_delete?(user_id, resource), do: can_access?(user_id, resource, :delete)
 
   def can_access?(user_id, resource, mode) when mode in @modes do
-    user_group_ids = Q.from(m in GroupMember, select: m.vinz_group_id)
-      |> Q.where([m], m.vinz_user_id == ^user_id)
+    user_group_ids = Q.from(m in GroupMember, select: m.vinz_access_group_id)
+      |> Q.where([m], m.vinz_access_user_id == ^user_id)
       |> Repo.all
 
     if Enum.count(user_group_ids) > 0 do
       access = Q.from(r in Right)
-        |> Q.where([r], r.global or (r.vinz_group_id in ^user_group_ids))
+        |> Q.where([r], r.global or (r.vinz_access_group_id in ^user_group_ids))
         |> Q.where([r], r.resource == ^resource)
         |> select(mode)
         |> Repo.all

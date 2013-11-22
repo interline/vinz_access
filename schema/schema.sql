@@ -22,11 +22,11 @@ create table vinz_access_group (
 
 create table vinz_access_group_member (
   id serial,
-  vinz_group_id integer,
-  vinz_user_id integer,
-    foreign key (vinz_group_id) references vinz_access_group(id),
-    foreign key (vinz_user_id) references vinz_access_user(id),
-    unique (vinz_group_id, vinz_user_id)
+  vinz_access_group_id integer,
+  vinz_access_user_id integer,
+    foreign key (vinz_access_group_id) references vinz_access_group(id),
+    foreign key (vinz_access_user_id) references vinz_access_user(id),
+    unique (vinz_access_group_id, vinz_access_user_id)
 );
 
 create table vinz_access_right (
@@ -34,7 +34,7 @@ create table vinz_access_right (
   name varchar(100) not null,
   resource varchar(100) not null,
   global boolean default true,
-  vinz_group_id integer,
+  vinz_access_group_id integer,
   can_read boolean,
   can_create boolean,
   can_update boolean,
@@ -47,7 +47,7 @@ create table vinz_access_filter (
   name varchar(100) not null,
   resource varchar(100) not null,
   global boolean default true,
-  vinz_group_id integer,
+  vinz_access_group_id integer,
   domain text,
   can_read boolean,
   can_create boolean,

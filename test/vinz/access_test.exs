@@ -20,15 +20,15 @@ defmodule Vinz.Access.Test do
     resource = "access-test-resource"
     user = User.new(username: "test-access", first_name: "Test", last_name: "Access") |> Repo.create
     group = Group.new(name: "access-test", comment: "a group for testing access controll") |> Repo.create
-    GroupMember.new(vinz_group_id: group.id, vinz_user_id: user.id) |> Repo.create
+    GroupMember.new(vinz_access_group_id: group.id, vinz_access_user_id: user.id) |> Repo.create
 
     Right.new(name: "test-access-create", resource: resource, global: true, can_create: true) |> Repo.create
-    Right.new(name: "test-access-read", resource: resource, global: false, vinz_group_id: group.id, can_read: true) |> Repo.create
-    Right.new(name: "test-access-update", resource: resource, global: false, vinz_group_id: group.id, can_update: true) |> Repo.create
+    Right.new(name: "test-access-read", resource: resource, global: false, vinz_access_group_id: group.id, can_read: true) |> Repo.create
+    Right.new(name: "test-access-update", resource: resource, global: false, vinz_access_group_id: group.id, can_update: true) |> Repo.create
     Right.new(name: "test-access-delete", resource: resource, global: true, can_delete: true) |> Repo.create
-    Right.new(name: "test-access-group-delete", resource: resource, global: false, vinz_group_id: group.id, can_delete: false)
-    Filter.new(name: "test-access-read-rilter-a", resource: resource, global: false, domain: "a", vinz_group_id: group.id, can_read: true) |> Repo.create
-    Filter.new(name: "test-access-read-rilter-b", resource: resource, global: false, domain: "b", vinz_group_id: group.id, can_read: true) |> Repo.create
+    Right.new(name: "test-access-group-delete", resource: resource, global: false, vinz_access_group_id: group.id, can_delete: false)
+    Filter.new(name: "test-access-read-rilter-a", resource: resource, global: false, domain: "a", vinz_access_group_id: group.id, can_read: true) |> Repo.create
+    Filter.new(name: "test-access-read-rilter-b", resource: resource, global: false, domain: "b", vinz_access_group_id: group.id, can_read: true) |> Repo.create
     { :ok, [ user: user, resource: resource ] }
   end
 
@@ -88,9 +88,9 @@ defmodule Vinz.Access.Test do
     [ 
       Group.Entity[],
       Right.Entity[id: _, name: "global rights to load resource", resource: "load", global: true, can_read: true, can_create: true, can_delete: false, can_update: false ],
-      Right.Entity[id: _, name: "test load group rights to load resource", resource: "load", global: false, vinz_group_id: ^group_id, can_read: true, can_create: true, can_delete: true, can_update: true ],
+      Right.Entity[id: _, name: "test load group rights to load resource", resource: "load", global: false, vinz_access_group_id: ^group_id, can_read: true, can_create: true, can_delete: true, can_update: true ],
       Filter.Entity[id: _, name: "global filter to load resource", resource: "load", global: true, domain: "a == b", can_create: true, can_read: true, can_update: false, can_delete: false ],
-      Filter.Entity[id: _, name: "test load group filter to load resource", resource: "load", global: false, vinz_group_id: ^group_id, domain: "a == b", can_create: false, can_read: false, can_delete: true, can_update: true ]
+      Filter.Entity[id: _, name: "test load group filter to load resource", resource: "load", global: false, vinz_access_group_id: ^group_id, domain: "a == b", can_create: false, can_read: false, can_delete: true, can_update: true ]
     ] = resp
   end
 end

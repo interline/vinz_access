@@ -14,13 +14,13 @@ defmodule Vinz.Access.Domains do
       |> Vinz.Access.Repo.all
       |> join
 
-    user_group_ids = Q.from(m in GroupMember, select: m.vinz_group_id)
-      |> Q.where([m], m.vinz_user_id == ^user_id)
+    user_group_ids = Q.from(m in GroupMember, select: m.vinz_access_group_id)
+      |> Q.where([m], m.vinz_access_user_id == ^user_id)
       |> Vinz.Access.Repo.all
     
     group_domains =
       if Enum.count(user_group_ids) > 0 do
-        Q.where(base_domain_query, [f], f.vinz_group_id in ^user_group_ids)
+        Q.where(base_domain_query, [f], f.vinz_access_group_id in ^user_group_ids)
           |> Vinz.Access.Repo.all
           |> join("or")
       else

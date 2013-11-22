@@ -28,7 +28,7 @@ defmodule Vinz.Access.Load do
     read?   = :read in modes
     update? = :update in modes
     delete? = :delete in modes
-    Right.Entity[name: name, resource: resource, global: false, vinz_group_id: group_id,
+    Right.Entity[name: name, resource: resource, global: false, vinz_access_group_id: group_id,
       can_create: create?, can_read: read?, can_update: update?, can_delete: delete? ]
     |> Repo.create
   end
@@ -49,7 +49,7 @@ defmodule Vinz.Access.Load do
     read?   = :read in modes
     update? = :update in modes
     delete? = :delete in modes
-    Filter.Entity[name: name, resource: resource, global: false, vinz_group_id: group_id, domain: domain,
+    Filter.Entity[name: name, resource: resource, global: false, vinz_access_group_id: group_id, domain: domain,
       can_create: create?, can_read: read?, can_update: update?, can_delete: delete? ]
     |> Repo.create
   end

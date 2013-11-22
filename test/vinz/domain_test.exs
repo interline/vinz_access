@@ -13,12 +13,12 @@ defmodule Vinz.Domain.Test do
     resource = "domain-test-resource"
     u = User.new(username: "domain-test", first_name: "Domain", last_name: "Test") |> Repo.create
     g = Group.new(name: "domain-test", description: "a group to test user domains") |> Repo.create
-    m = GroupMember.new(vinz_group_id: g.id, vinz_user_id: u.id) |> Repo.create
+    m = GroupMember.new(vinz_access_group_id: g.id, vinz_access_user_id: u.id) |> Repo.create
     Filter.new(name: "global-test-filter", resource: resource, global: true, domain: "G", can_read: true) |> Repo.create
-    Filter.new(name: "group-specific-filter-read", resource: resource, global: false, vinz_group_id: g.id, domain: "GSR", can_read: true) |> Repo.create
-    Filter.new(name: "group-specific-filter-write-u", resource: resource, global: false, vinz_group_id: g.id, domain: "U", can_update: true) |> Repo.create
-    Filter.new(name: "group-specific-filter-write-c", resource: resource, global: false, vinz_group_id: g.id, domain: "C", can_create: true) |> Repo.create
-    Filter.new(name: "group-specific-filter-write-d", resource: resource, global: false, vinz_group_id: g.id, domain: "D", can_delete: true) |> Repo.create
+    Filter.new(name: "group-specific-filter-read", resource: resource, global: false, vinz_access_group_id: g.id, domain: "GSR", can_read: true) |> Repo.create
+    Filter.new(name: "group-specific-filter-write-u", resource: resource, global: false, vinz_access_group_id: g.id, domain: "U", can_update: true) |> Repo.create
+    Filter.new(name: "group-specific-filter-write-c", resource: resource, global: false, vinz_access_group_id: g.id, domain: "C", can_create: true) |> Repo.create
+    Filter.new(name: "group-specific-filter-write-d", resource: resource, global: false, vinz_access_group_id: g.id, domain: "D", can_delete: true) |> Repo.create
     { :ok, [ user: u, group: g, group_member: m, resource: resource ] }
   end
 

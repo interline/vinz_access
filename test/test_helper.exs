@@ -1,5 +1,5 @@
 ExUnit.start
-Vinz.Access.Repo.start_link
+# Vinz.Access.Repo.start_link
 
 defmodule Vinz.Access.TestCase do
   defmacro __using__(_) do
