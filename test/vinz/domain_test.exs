@@ -1,6 +1,8 @@
 defmodule Vinz.Domain.Test do
   use ExUnit.Case
 
+  alias Ecto.Adapters.Postgres
+  
   alias Vinz.User
   alias Vinz.Group
   alias Vinz.GroupMember
@@ -8,6 +10,8 @@ defmodule Vinz.Domain.Test do
   alias Vinz.AccessFilter, as: Filter
 
   setup_all do
+    Postgres.begin_test_transaction(Vinz.Repo)
+    
     resource = "domain-test-resource"
     u = User.new(username: "domain-test", first_name: "Domain", last_name: "Test") |> Repo.create
     g = Group.new(name: "domain-test", description: "a group to test user domains") |> Repo.create
@@ -21,10 +25,7 @@ defmodule Vinz.Domain.Test do
   end
 
   teardown_all context do
-    Repo.delete_all(Filter)
-    Repo.delete(context[:group_member])
-    Repo.delete(context[:group])
-    Repo.delete(context[:user])
+    Postgres.rollback_test_transaction(Vinz.Repo)
     :ok
   end
 

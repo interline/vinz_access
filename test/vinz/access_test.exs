@@ -88,9 +88,9 @@ defmodule Vinz.Access.Test do
     [ 
       Group.Entity[],
       AccessRight.Entity[id: _, name: "global rights to load resource", resource: "load", global: true, can_read: true, can_create: true, can_delete: false, can_update: false ],
-      AccessRight.Entity[id: _, name: "test load group rights to load resource", resource: "load", global: false, vinz_group_id: group_id, can_read: true, can_create: true, can_delete: true, can_update: true ],
+      AccessRight.Entity[id: _, name: "test load group rights to load resource", resource: "load", global: false, vinz_group_id: ^group_id, can_read: true, can_create: true, can_delete: true, can_update: true ],
       AccessFilter.Entity[id: _, name: "global filter to load resource", resource: "load", global: true, domain: "a == b", can_create: true, can_read: true, can_update: false, can_delete: false ],
-      AccessFilter.Entity[id: _, name: "test load group filter to load resource", resource: "load", global: false, vinz_group_id: group_id, domain: "a == b", can_create: false, can_read: false, can_delete: true, can_update: true ]
+      AccessFilter.Entity[id: _, name: "test load group filter to load resource", resource: "load", global: false, vinz_group_id: ^group_id, domain: "a == b", can_create: false, can_read: false, can_delete: true, can_update: true ]
     ] = resp
   end
 end

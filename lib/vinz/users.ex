@@ -6,9 +6,7 @@ defmodule Vinz.Users do
   alias Vinz.User
 
   def create(creator_id, vals) do
-    unless Access.check(creator_id, @resource, :create) do
-      { :error, :unauthorized }
-    else
+    Access.permit creator_id, @resource, :create, fn ->
       user = User.new(vals)
       case User.validate(user) do
         { :ok, user } -> Repo.create(user)
@@ -18,9 +16,7 @@ defmodule Vinz.Users do
   end
 
   def delete(deletor_id, user_id) do
-    unless Access.check(deletor_id, @resource, :delete) do
-      { :error, :unauthroized }
-    else
+    Access.permit deletor_id, @resource, :delete, fn ->
       if user = Repo.find(User, user_id) do
         Repo.delete(user)
       else
