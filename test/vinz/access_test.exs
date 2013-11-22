@@ -1,9 +1,9 @@
 defmodule Vinz.Access.Test do
-  use ExUnit.Case
+  use Vinz.Access.TestCase
 
   import Vinz.Access, only: [ can_create?: 2, can_read?: 2, can_update?: 2, can_delete?: 2, check!: 3, permit: 4 ]
 
-  alias Ecto.Adapters.Postgres
+  # alias Ecto.Adapters.Postgres
 
   alias Vinz.Access
   alias Vinz.Access.Repo
@@ -16,8 +16,7 @@ defmodule Vinz.Access.Test do
 
 
   setup_all do
-    Postgres.begin_test_transaction(Repo)
-
+    begin
     resource = "access-test-resource"
     user = User.new(username: "test-access", first_name: "Test", last_name: "Access") |> Repo.create
     group = Group.new(name: "access-test", comment: "a group for testing access controll") |> Repo.create
@@ -32,11 +31,8 @@ defmodule Vinz.Access.Test do
     Filter.new(name: "test-access-read-rilter-b", resource: resource, global: false, domain: "b", vinz_group_id: group.id, can_read: true) |> Repo.create
     { :ok, [ user: user, resource: resource ] }
   end
-  
-  teardown_all do
-    Postgres.rollback_test_transaction(Repo)
-    :ok
-  end
+
+  teardown_all do: rollback
 
   test :user_access, ctx do
     id = ctx[:user].id

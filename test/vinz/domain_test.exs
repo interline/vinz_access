@@ -1,7 +1,5 @@
 defmodule Vinz.Domain.Test do
-  use ExUnit.Case
-
-  alias Ecto.Adapters.Postgres
+  use Vinz.Access.TestCase
   
   alias Vinz.Access.Domains
   alias Vinz.Access.Repo
@@ -11,24 +9,20 @@ defmodule Vinz.Domain.Test do
   alias Vinz.Access.Models.GroupMember
 
   setup_all do
-    Postgres.begin_test_transaction(Vinz.Access.Repo)
-    
+    begin
     resource = "domain-test-resource"
     u = User.new(username: "domain-test", first_name: "Domain", last_name: "Test") |> Repo.create
     g = Group.new(name: "domain-test", description: "a group to test user domains") |> Repo.create
     m = GroupMember.new(vinz_group_id: g.id, vinz_user_id: u.id) |> Repo.create
-    Filter.new(name: "global-test-rule", resource: resource, global: true, domain: "G", can_read: true) |> Repo.create
-    Filter.new(name: "group-specific-rule-read", resource: resource, global: false, vinz_group_id: g.id, domain: "GSR", can_read: true) |> Repo.create
-    Filter.new(name: "group-specific-rule-write", resource: resource, global: false, vinz_group_id: g.id, domain: "U", can_update: true) |> Repo.create
-    Filter.new(name: "group-specific-rule-write", resource: resource, global: false, vinz_group_id: g.id, domain: "C", can_create: true) |> Repo.create
-    Filter.new(name: "group-specific-rule-write", resource: resource, global: false, vinz_group_id: g.id, domain: "D", can_delete: true) |> Repo.create
+    Filter.new(name: "global-test-filter", resource: resource, global: true, domain: "G", can_read: true) |> Repo.create
+    Filter.new(name: "group-specific-filter-read", resource: resource, global: false, vinz_group_id: g.id, domain: "GSR", can_read: true) |> Repo.create
+    Filter.new(name: "group-specific-filter-write-u", resource: resource, global: false, vinz_group_id: g.id, domain: "U", can_update: true) |> Repo.create
+    Filter.new(name: "group-specific-filter-write-c", resource: resource, global: false, vinz_group_id: g.id, domain: "C", can_create: true) |> Repo.create
+    Filter.new(name: "group-specific-filter-write-d", resource: resource, global: false, vinz_group_id: g.id, domain: "D", can_delete: true) |> Repo.create
     { :ok, [ user: u, group: g, group_member: m, resource: resource ] }
   end
 
-  teardown_all context do
-    Postgres.rollback_test_transaction(Vinz.Access.Repo)
-    :ok
-  end
+  teardown_all do: rollback
 
   test :join_domains do
     import Domains, only: [ join: 1, join: 2 ]

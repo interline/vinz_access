@@ -3,7 +3,7 @@ defmodule Vinz.Access.Models do
 defmodule User do
   use Ecto.Model
 
-  queryable "vinz_user" do
+  queryable "vinz_access_user" do
     field :username, :string
     field :first_name, :string
     field :last_name, :string
@@ -16,7 +16,7 @@ defmodule Group do
   use Ecto.Model
   import Ecto.Query
 
-  queryable "vinz_group" do
+  queryable "vinz_access_group" do
     field :name, :string
     field :comment, :string
   end
@@ -31,7 +31,7 @@ end
 defmodule GroupMember do
   use Ecto.Model
 
-  queryable "vinz_group_member" do
+  queryable "vinz_access_group_member" do
     field :vinz_group_id, :integer
     field :vinz_user_id, :integer
   end
