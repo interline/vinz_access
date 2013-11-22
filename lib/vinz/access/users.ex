@@ -1,9 +1,9 @@
-defmodule Vinz.Users do
+defmodule Vinz.Access.Users do
   @resource "vinz.users"
 
   alias Vinz.Access
-  alias Vinz.Repo
-  alias Vinz.User
+  alias Vinz.Access.Repo
+  alias Vinz.Access.Models.User
 
   def create(creator_id, vals) do
     Access.permit creator_id, @resource, :create, fn ->

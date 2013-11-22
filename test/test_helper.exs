@@ -1,2 +1,2 @@
 ExUnit.start
-Vinz.Repo.start_link
+Vinz.Access.Repo.start_link

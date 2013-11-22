@@ -3,14 +3,15 @@ defmodule Vinz.Domain.Test do
 
   alias Ecto.Adapters.Postgres
   
-  alias Vinz.User
-  alias Vinz.Group
-  alias Vinz.GroupMember
-  alias Vinz.Repo
-  alias Vinz.AccessFilter, as: Filter
+  alias Vinz.Access.Domains
+  alias Vinz.Access.Repo
+  alias Vinz.Access.Models.Filter
+  alias Vinz.Access.Models.User
+  alias Vinz.Access.Models.Group
+  alias Vinz.Access.Models.GroupMember
 
   setup_all do
-    Postgres.begin_test_transaction(Vinz.Repo)
+    Postgres.begin_test_transaction(Vinz.Access.Repo)
     
     resource = "domain-test-resource"
     u = User.new(username: "domain-test", first_name: "Domain", last_name: "Test") |> Repo.create
@@ -25,12 +26,12 @@ defmodule Vinz.Domain.Test do
   end
 
   teardown_all context do
-    Postgres.rollback_test_transaction(Vinz.Repo)
+    Postgres.rollback_test_transaction(Vinz.Access.Repo)
     :ok
   end
 
   test :join_domains do
-    import Vinz.Domains, only: [ join: 1, join: 2 ]
+    import Domains, only: [ join: 1, join: 2 ]
     
     assert "" == join([])
     assert "a" == join(%w(a))
@@ -41,9 +42,9 @@ defmodule Vinz.Domain.Test do
   test :getting_user_domains, context do
     user = Keyword.get(context, :user)
     resource = Keyword.get(context, :resource)
-    assert "(G) and (GSR)" == Vinz.Domains.get(user.id, resource)
-    assert "U" == Vinz.Domains.get(user.id, resource, :update)
-    assert "C" == Vinz.Domains.get(user.id, resource, :create)
-    assert "D" == Vinz.Domains.get(user.id, resource, :delete)  
+    assert "(G) and (GSR)" == Domains.get(user.id, resource)
+    assert "U" == Domains.get(user.id, resource, :update)
+    assert "C" == Domains.get(user.id, resource, :create)
+    assert "D" == Domains.get(user.id, resource, :delete)  
   end
 end

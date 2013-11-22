@@ -1,8 +1,8 @@
 defmodule Vinz.Access.Load do
-  alias Vinz.Repo
-  alias Vinz.Group
-  alias Vinz.AccessRight
-  alias Vinz.AccessFilter
+  alias Vinz.Access.Repo
+  alias Vinz.Access.Models.Group
+  alias Vinz.Access.Models.Right
+  alias Vinz.Access.Models.Filter
 
   def load_string(string) when is_binary(string) do
     Code.eval_string(string, [], [ delegate_locals_to: __MODULE__ ])
@@ -17,7 +17,7 @@ defmodule Vinz.Access.Load do
     read?   = :read in modes
     update? = :update in modes
     delete? = :delete in modes
-    AccessRight.Entity[name: name, resource: resource, global: true,
+    Right.Entity[name: name, resource: resource, global: true,
       can_create: create?, can_read: read?, can_update: update?, can_delete: delete? ]
     |> Repo.create
   end
@@ -28,7 +28,7 @@ defmodule Vinz.Access.Load do
     read?   = :read in modes
     update? = :update in modes
     delete? = :delete in modes
-    AccessRight.Entity[name: name, resource: resource, global: false, vinz_group_id: group_id,
+    Right.Entity[name: name, resource: resource, global: false, vinz_group_id: group_id,
       can_create: create?, can_read: read?, can_update: update?, can_delete: delete? ]
     |> Repo.create
   end
@@ -38,7 +38,7 @@ defmodule Vinz.Access.Load do
     read?   = :read in modes
     update? = :update in modes
     delete? = :delete in modes
-    AccessFilter.Entity[name: name, resource: resource, global: true, domain: domain,
+    Filter.Entity[name: name, resource: resource, global: true, domain: domain,
       can_create: create?, can_read: read?, can_update: update?, can_delete: delete? ]
     |> Repo.create
   end
@@ -49,7 +49,7 @@ defmodule Vinz.Access.Load do
     read?   = :read in modes
     update? = :update in modes
     delete? = :delete in modes
-    AccessFilter.Entity[name: name, resource: resource, global: false, vinz_group_id: group_id, domain: domain,
+    Filter.Entity[name: name, resource: resource, global: false, vinz_group_id: group_id, domain: domain,
       can_create: create?, can_read: read?, can_update: update?, can_delete: delete? ]
     |> Repo.create
   end

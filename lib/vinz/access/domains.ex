@@ -1,25 +1,25 @@
-defmodule Vinz.Domains do
+defmodule Vinz.Access.Domains do
   require Ecto.Query
 
   alias Ecto.Query, as: Q
-  alias Vinz.AccessFilter, as: Filter
-  alias Vinz.GroupMember
+  alias Vinz.Access.Models.Filter
+  alias Vinz.Access.Models.GroupMember
 
   def get(user_id, resource, mode // :read) do
     user_group_ids = Q.from(m in GroupMember, select: m.vinz_group_id)
       |> Q.where([m], m.vinz_user_id == ^user_id)
-      |> Vinz.Repo.all
+      |> Vinz.Access.Repo.all
 
     base_domain_query = Q.from(f in Filter, select: f.domain)
       |> Q.where([f], f.resource == ^resource)
       |> filter_on_mode(mode)
 
     global_domains = Q.where(base_domain_query, [f], f.global)
-      |> Vinz.Repo.all
+      |> Vinz.Access.Repo.all
       |> join
     
     group_domains = Q.where(base_domain_query, [f], f.vinz_group_id in ^user_group_ids)
-      |> Vinz.Repo.all
+      |> Vinz.Access.Repo.all
       |> join("or")
 
     join([global_domains, group_domains])

@@ -3,10 +3,10 @@ defmodule Vinz.Access do
 
   alias Ecto.Query, as: Q
 
-  alias Vinz.Repo
-  alias Vinz.Domains
-  alias Vinz.AccessRight
-  alias Vinz.GroupMember
+  alias Vinz.Access.Repo
+  alias Vinz.Access.Domains
+  alias Vinz.Access.Models.GroupMember
+  alias Vinz.Access.Models.Right
 
   @modes [ :create, :read, :update, :delete ]
 
@@ -46,7 +46,7 @@ defmodule Vinz.Access do
       |> Q.where([m], m.vinz_user_id == ^user_id)
       |> Repo.all
 
-    access = Q.from(a in AccessRight)
+    access = Q.from(r in Right)
       |> Q.where([r], r.global or (r.vinz_group_id in ^user_group_ids))
       |> Q.where([r], r.resource == ^resource)
       |> select(mode)

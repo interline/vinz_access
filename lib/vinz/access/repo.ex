@@ -1,4 +1,4 @@
-defmodule Vinz.Repo do
+defmodule Vinz.Access.Repo do
   use Ecto.Repo, adapter: Ecto.Adapters.Postgres
 
   def url do
@@ -11,11 +11,11 @@ defmodule Vinz.Repo do
   end
 
   def query_apis do
-    super() ++ [Vinz.Repo.Query.Api]
+    super() ++ [Vinz.Access.Repo.Query.Api]
   end
 end
 
-defmodule Vinz.Repo.Query.Api do
+defmodule Vinz.Access.Repo.Query.Api do
   use Ecto.Query.Typespec
 
   ## Types
